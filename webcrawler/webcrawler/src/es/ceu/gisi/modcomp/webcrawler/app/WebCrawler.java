@@ -1,8 +1,11 @@
 package es.ceu.gisi.modcomp.webcrawler.app;
 
 import es.ceu.gisi.modcomp.webcrawler.exceptions.WebCrawlerException;
+import es.ceu.gisi.modcomp.webcrawler.jflex.JFlexScraper;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Esta aplicación contiene el programa principal que ejecuta ambas partes del
@@ -22,7 +25,7 @@ public class WebCrawler {
          * En primer lugar, deberá inicializar su clase JFlexScraper con un
          * fichero HTML REAL (y complejo) que haya almacenado en disco. Para la
          * lectura del fichero se recomienda almacenarlo en el mismo directorio
-         * en que se encuentran los ficheros de pruebay que haga uso del mismo
+         * en que se encuentran los ficheros de prueba y que haga uso del mismo
          * código que ilustra cómo se cargan los ficheros de pruebas en la clase
          * de test.
          *
@@ -34,8 +37,21 @@ public class WebCrawler {
          * También deberá mostrar un mensaje en pantalla indicando si el fichero
          * HTML que se ha pasado está bien balanceado.
          */
-        System.out.println("\n\n** JFLEXSCRAPER **\n\n");
-
+        //System.out.println("\n\n** JFLEXSCRAPER **\n\n");
+        
+        // Si el archivo está presente en el proyecto, sólo indique el nombre, de lo contrario proporcione la ruta completa.
+        String htmlFilePath = "eleconomista.html";
+        
+        //Inicializar el objeto htmlFile desde la ruta
+        File htmlFile = new File(htmlFilePath);
+        
+        // Debe inicializar JFlexScraper con el archivo HTML a analizar
+         JFlexScraper scrapper = new JFlexScraper(htmlFile);
+         
+        List<String> hyperLinks =  scrapper.retrieveHyperlinksA();
+        List<String> imgLinks =  scrapper.retrieveHyperlinksIMG();
+        
+         
         /**
          * En segundo lugar, debajo de este comentario, pasará a demostrar el
          * uso de la clase JsoupScraper que ha programado. Para ello, escribirá
