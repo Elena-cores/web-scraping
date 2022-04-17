@@ -94,6 +94,7 @@ public class JFlexScraper implements WebScraper {
              * propuesta.
              *
              */
+            
             // Estado inicial del autómata.
             int state = 0;
 
@@ -162,17 +163,22 @@ public class JFlexScraper implements WebScraper {
                                      }
                             }
                         }  else if(token.getType()==Type.SLASH) {
-                            state = 5;
+                            state = 5; //revise later 
+                            if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
+                                tagStack.pop(); //si coincide con lo que tengo en la cima de la pila. Elemento se quita
+                                } else {  
+                                    tagsBalanced = false;
+                                }
                         }  else if(token.getType()==Type.CLOSE) {
                             state = 0;
                         } 
                         break;
-                     case 3: 
+                    case 3: 
                         //Se espera un =
                             if(token.getType()==Type.EQUAL) {
                             state = 4;
                             }
-                             break;
+                        break;
                     case 4: 
                         //esto es un valor de un atributo. Se guarda url dependiendo del atributo del token
                         if(token.getType()==Type.VALUE) {
@@ -184,7 +190,23 @@ public class JFlexScraper implements WebScraper {
                             }
                         }
                         break;
-                    
+                    case 5: 
+                        //Se espera un >
+                        if(token.getType()==Type.CLOSE) {
+                            state = 0; //se vuelve al estado inicial
+                            }
+                        break;
+                    case 6: 
+                        //Estado donde quitamos etiqueta de la pila
+                        //Se compara la palabra del token con la cima de la pila. Si coincide lo quitaremos
+                        if(token.getType()==Type.WORD) {
+                            if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
+                                tagStack.pop(); //si coincide con lo que tengo en la cima de la pila
+                                } else {  
+                                    tagsBalanced = false;
+                                }
+                        }
+                        break; 
                         
                     default:
                         throw new WebCrawlerException("Error en la asignación de estado, el programa termina.");
