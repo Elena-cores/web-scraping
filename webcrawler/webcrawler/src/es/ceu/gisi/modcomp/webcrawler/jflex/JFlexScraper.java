@@ -98,7 +98,12 @@ public class JFlexScraper implements WebScraper {
             int state = 0;
 
             Token token = parser.next();
-
+            
+            boolean etiquetaA = false;
+            boolean etiquetaIMG = false;
+            boolean valorEsHREF = false;
+            boolean valorEsSRC = false;
+            
             while (token != null) {
 
                 switch (state) {
@@ -127,6 +132,20 @@ public class JFlexScraper implements WebScraper {
 
                             default:
                             // No interesa.
+                        }
+                    case 1:
+                        //Estado cuando se lee un OPEN
+                        if(token.getType()==Type.WORD) {
+                            state = 2;
+                            //notar que se abre una etiqueta
+                            tagStack.push(token.getValue().toLowerCase());
+                            if(token.getValue().equalsIgnoreCase("a")) {
+                                etiquetaA = true;
+                            }   else if(token.getValue().equalsIgnoreCase("img")) {
+                                etiquetaIMG = true; 
+                            }
+                        }   else if(token.getType()==Type.SLASH) {
+                            state = 6;
                         }
                         break;
 
