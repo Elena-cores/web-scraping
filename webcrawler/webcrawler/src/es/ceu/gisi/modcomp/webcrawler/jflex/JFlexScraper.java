@@ -132,7 +132,7 @@ public class JFlexScraper implements WebScraper {
 
                             default:
                             // No interesa.
-                        }
+                        } // Continúe implementando su autómata....
                     case 1:
                         //Estado cuando se lee un OPEN
                         if(token.getType()==Type.WORD) {
@@ -148,8 +148,44 @@ public class JFlexScraper implements WebScraper {
                             state = 6;
                         }
                         break;
-
-                    // Continúe implementando su autómata....
+                    case 2:
+                        //Se debe leer att=valor o fin de etiqueta
+                        if(token.getType() == Type.WORD) {
+                            state = 3;
+                            if(etiquetaA) {
+                                if(token.getValue().equalsIgnoreCase("href")){
+                                    valorEsHREF = true;
+                                 }
+                            }   else if(etiquetaIMG) {
+                                    if(token.getValue().equalsIgnoreCase("src")) {
+                                         valorEsSRC = true;
+                                     }
+                            }
+                        }  else if(token.getType()==Type.SLASH) {
+                            state = 5;
+                        }  else if(token.getType()==Type.CLOSE) {
+                            state = 0;
+                        } 
+                        break;
+                     case 3: 
+                        //Se espera un =
+                            if(token.getType()==Type.EQUAL) {
+                            state = 4;
+                            }
+                             break;
+                    case 4: 
+                        //esto es un valor de un atributo. Se guarda url dependiendo del atributo del token
+                        if(token.getType()==Type.VALUE) {
+                            if(valorEsHREF) {
+                                 urlsA.add(token.getValue());
+                            }
+                            if(valorEsSRC) {
+                                urlsIMG.add(token.getValue());
+                            }
+                        }
+                        break;
+                    
+                        
                     default:
                         throw new WebCrawlerException("Error en la asignación de estado, el programa termina.");
                 }
