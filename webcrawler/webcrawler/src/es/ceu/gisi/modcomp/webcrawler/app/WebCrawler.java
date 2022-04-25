@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  * Esta aplicación contiene el programa principal que ejecuta ambas partes del
@@ -51,7 +52,19 @@ public class WebCrawler {
         List<String> hyperLinks =  scrapper.retrieveHyperlinksA();
         List<String> imgLinks =  scrapper.retrieveHyperlinksIMG();
         
-         
+        // Creará un archivo con todos los hipervínculos que encuentre.
+        WriteLinksToFile("linksFile.txt", hyperLinks, imgLinks); 
+        
+        // También se debe indicar, mediante un mensaje en la pantalla que
+       // el archivo HTML pasado está bien balanceado.
+        boolean isDocBalanced = scrapper.esDocumentoHTMLBienBalanceado();
+        if (isDocBalanced)
+            JOptionPane.showMessageDialog(null, "HTML Document is balanced");
+        else
+            JOptionPane.showMessageDialog(null, "HTML Document is not balanced");
+        
+        
+        
         /**
          * En segundo lugar, debajo de este comentario, pasará a demostrar el
          * uso de la clase JsoupScraper que ha programado. Para ello, escribirá
@@ -71,5 +84,9 @@ public class WebCrawler {
          */
         System.out.println("\n\n** JSOUPSCRAPER **\n\n");
 
+    }
+
+    private static void WriteLinksToFile(String linksFiletxt, List<String> hyperLinks, List<String> imgLinks) {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }
