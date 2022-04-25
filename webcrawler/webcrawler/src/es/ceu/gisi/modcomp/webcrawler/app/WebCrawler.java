@@ -5,6 +5,7 @@ import es.ceu.gisi.modcomp.webcrawler.jflex.JFlexScraper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -85,8 +86,42 @@ public class WebCrawler {
         System.out.println("\n\n** JSOUPSCRAPER **\n\n");
 
     }
+    
+    /**
+     * Escribir los datos tanto del List<String> al archivo, con el filePath dado
+     *
+     * @param filePath Ruta del archivo junto con el nombre y el tipo.
+     * @param hyperLinks Lista de hiperenlaces de la etiqueta A.
+     * @param imgLinks Lista de hiperenlaces de la etiqueta IMG.
+     */
 
-    private static void WriteLinksToFile(String linksFiletxt, List<String> hyperLinks, List<String> imgLinks) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    private static void WriteLinksToFile(String filePath, List<String> hyperLinks, List<String> imgLinks) throws FileNotFoundException {
+         PrintWriter out = new PrintWriter(filePath);
+          AddToFile("Hyperlinks:", hyperLinks, out);
+          AddToFile("HyperlinkImages:", imgLinks, out);
     }
+    
+    /**
+     * Método que añade datos de yList<String> a una instancia de PrintWriter.
+     * Cada elemento de datos en una línea diferente.
+     * Limpia la instancia de PrintWriter una vez que los datos son añadidos a ella.
+     *
+     * @param type Descripción del tipo de datos en List<String>.
+     * @param linksList Lista de datos.
+     * @param out Instancia de PrintWriter a la que añadir los datos.
+     */
+
+    private static void AddToFile(String type, List<String> linksList, PrintWriter out) {
+        StringBuilder sb = new StringBuilder();
+        if(!linksList.isEmpty()){
+            sb.append(type).append("\n");
+            for(String link: linksList){
+                sb.append(link).append("\n");
+            }            
+            sb.append("\n");            
+            out.append(sb.toString());
+            out.flush();
+        }
+    }
+
 }
