@@ -44,8 +44,11 @@ public class WebCrawler {
         // Si el archivo está presente en el proyecto, sólo indique el nombre, de lo contrario proporcione la ruta completa.
         String htmlFilePath = "eleconomista.html";
         
+        String TESTFILE_PATH = new java.io.File("").getAbsolutePath()
+            + "/test/es/ceu/gisi/modcomp/webcrawler/testfiles/";
+        
         //Inicializar el objeto htmlFile desde la ruta
-        File htmlFile = new File(htmlFilePath);
+        File htmlFile = new File(TESTFILE_PATH + htmlFilePath);
         
         // Debe inicializar JFlexScraper con el archivo HTML a analizar
          JFlexScraper scrapper = new JFlexScraper(htmlFile);
@@ -102,7 +105,7 @@ public class WebCrawler {
     }
     
     /**
-     * Método que añade datos de yList<String> a una instancia de PrintWriter.
+     * Método que añade datos de y List<String> a una instancia de PrintWriter.
      * Cada elemento de datos en una línea diferente.
      * Limpia la instancia de PrintWriter una vez que los datos son añadidos a ella.
      *
@@ -112,15 +115,8 @@ public class WebCrawler {
      */
 
     private static void AddToFile(String type, List<String> linksList, PrintWriter out) {
-        StringBuilder sb = new StringBuilder();
-        if(!linksList.isEmpty()){
-            sb.append(type).append("\n");
-            for(String link: linksList){
-                sb.append(link).append("\n");
-            }            
-            sb.append("\n");            
-            out.append(sb.toString());
-            out.flush();
+        for(String s: linksList) {
+            out.println(s);
         }
     }
 

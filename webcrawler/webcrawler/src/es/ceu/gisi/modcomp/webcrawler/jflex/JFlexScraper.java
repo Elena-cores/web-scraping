@@ -136,6 +136,7 @@ public class JFlexScraper implements WebScraper {
                         } // Continúe implementando su autómata....
                     case 1:
                         //Estado cuando se lee un OPEN
+                        //switch del token 
                         if(token.getType()==Type.WORD) {
                             state = 2;
                             //notar que se abre una etiqueta
@@ -194,7 +195,12 @@ public class JFlexScraper implements WebScraper {
                         //Se espera un >
                         if(token.getType()==Type.CLOSE) {
                             state = 0; //se vuelve al estado inicial
+                             etiquetaA = false;
+                            etiquetaIMG = false;
+                            valorEsHREF = false;
+                            valorEsSRC = false;
                             }
+                       
                         break;
                     case 6: 
                         //Estado donde quitamos etiqueta de la pila
@@ -218,7 +224,7 @@ public class JFlexScraper implements WebScraper {
                  */
                 token = parser.next();
             }
-
+          tagsBalanced = tagsBalanced && tagStack.isEmpty();
         } catch (WebCrawlerException wce) {
             System.out.println(wce.toString());
         }
