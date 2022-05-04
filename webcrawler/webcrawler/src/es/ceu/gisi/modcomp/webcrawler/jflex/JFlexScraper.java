@@ -134,83 +134,110 @@ public class JFlexScraper implements WebScraper {
                             default:
                             // No interesa.
                         } // Continúe implementando su autómata....
+                        
                     case 1:
                         //Estado cuando se lee un OPEN
                         //switch del token 
-                        if(token.getType()==Type.WORD) {
-                            state = 2;
-                            //notar que se abre una etiqueta
-                            tagStack.push(token.getValue().toLowerCase());
-                            if(token.getValue().equalsIgnoreCase("a")) {
-                                etiquetaA = true;
-                            }   else if(token.getValue().equalsIgnoreCase("img")) {
-                                etiquetaIMG = true; 
-                            }
-                        }   else if(token.getType()==Type.SLASH) {
-                            state = 6;
+                        switch (token.getType()) {
+                            case WORD:
+                                //Se transita al estado 2
+                                state = 2; 
+                                /**
+                                 * Notar que se abre una etiqueta
+                                 * Se comprueba el tipo de palabra que determinará
+                                 * el tipo de atributo que viene a continuación.
+                                 */
+                                tagStack.push(token.getValue().toLowerCase());
+                                if(token.getValue().equalsIgnoreCase("a")) {
+                                    etiquetaA = true;
+                                 }   else if(token.getValue().equalsIgnoreCase("img")) {
+                                    etiquetaIMG = true; 
+                                        }
+                            case SLASH:
+                                
+                                 state = 6;
+                              
                         }
-                        break;
+                        
+                                break;
+                        
                     case 2:
                         //Se debe leer att=valor o fin de etiqueta
-                        if(token.getType() == Type.WORD) {
-                            state = 3;
-                            if(etiquetaA) {
-                                if(token.getValue().equalsIgnoreCase("href")){
-                                    valorEsHREF = true;
-                                 }
-                            }   else if(etiquetaIMG) {
-                                    if(token.getValue().equalsIgnoreCase("src")) {
-                                         valorEsSRC = true;
-                                     }
-                            }
-                        }  else if(token.getType()==Type.SLASH) {
-                            state = 5; //revise later 
-                            if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
-                                tagStack.pop(); //si coincide con lo que tengo en la cima de la pila. Elemento se quita
-                                } else {  
-                                    tagsBalanced = false;
-                                }
-                        }  else if(token.getType()==Type.CLOSE) {
-                            state = 0;
-                        } 
-                        break;
+                        switch (token.getType()) {
+                            case WORD:
+                                state = 3;
+                                
+                                    if(etiquetaA) {
+                                        if(token.getValue().equalsIgnoreCase("href")){
+                                            valorEsHREF = true;
+                                            }
+                                      }     else if(etiquetaIMG) {
+                                                if(token.getValue().equalsIgnoreCase("src")) {
+                                                    valorEsSRC = true;
+                                                 }
+                                            }
+                            case SLASH:
+                                state = 5; //etiqueta no nos interesa
+                                    if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
+                                        tagStack.pop(); //si coincide con lo que tengo en la cima de la pila. Elemento se quita
+                                    }   else {  
+                                            tagsBalanced = false;
+                                        }
+                            case CLOSE:
+                                
+                                state = 0;
+                               
+                        }
+                                 break;
+                         
                     case 3: 
                         //Se espera un =
-                            if(token.getType()==Type.EQUAL) {
-                            state = 4;
-                            }
-                        break;
+                        switch (token.getType()) {
+                            case EQUAL:
+                                state = 4;
+                                break;
+                                }
                     case 4: 
                         //esto es un valor de un atributo. Se guarda url dependiendo del atributo del token
-                        if(token.getType()==Type.VALUE) {
-                            if(valorEsHREF) {
-                                 urlsA.add(token.getValue());
-                            }
-                            if(valorEsSRC) {
-                                urlsIMG.add(token.getValue());
-                            }
+                        switch (token.getType()) {
+                            case VALUE:
+                                if(valorEsHREF) {
+                                     urlsA.add(token.getValue());
+                                }
+                                if(valorEsSRC) {
+                                    urlsIMG.add(token.getValue());
+                                }
+                              
                         }
-                        break;
+                                 break;
                     case 5: 
-                        //Se espera un >
-                        if(token.getType()==Type.CLOSE) {
-                            state = 0; //se vuelve al estado inicial
-                             etiquetaA = false;
-                            etiquetaIMG = false;
-                            valorEsHREF = false;
-                            valorEsSRC = false;
+                        /**Se espera un >
+                         * Se vuelve a inicializar los atributos a false,
+                         * para el siguiente token.
+                         */
+                        
+                         switch (token.getType()) {
+                            case CLOSE:
+                                state = 0; //se vuelve al estado inicial
+                                etiquetaA = false;
+                                etiquetaIMG = false;
+                                valorEsHREF = false;
+                                valorEsSRC = false;
+
+                                break;
                             }
-                       
-                        break;
+                       break;
                     case 6: 
                         //Estado donde quitamos etiqueta de la pila
                         //Se compara la palabra del token con la cima de la pila. Si coincide lo quitaremos
-                        if(token.getType()==Type.WORD) {
-                            if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
-                                tagStack.pop(); //si coincide con lo que tengo en la cima de la pila
-                                } else {  
-                                    tagsBalanced = false;
-                                }
+                        switch (token.getType()) {
+                            case WORD:
+                                if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
+                                    tagStack.pop(); //si coincide con lo que tengo en la cima de la pila
+                                 }   else {  
+                                        tagsBalanced = false;
+                                    }
+                              
                         }
                         break; 
                         
