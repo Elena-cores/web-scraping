@@ -148,15 +148,19 @@ public class JFlexScraper implements WebScraper {
                                  * el tipo de atributo que viene a continuación.
                                  */
                                 tagStack.push(token.getValue().toLowerCase());
+                                System.out.println(tagStack);
                                 if(token.getValue().equalsIgnoreCase("a")) {
                                     etiquetaA = true;
+                                    System.out.println("se detecta una etiqueta con url a");
                                  }   else if(token.getValue().equalsIgnoreCase("img")) {
                                     etiquetaIMG = true; 
+                                    System.out.println("se detecta una etiqueta con url img");
                                         }
+                                break;
                             case SLASH:
                                 
                                  state = 6;
-                              
+                              break;
                         }
                         
                                 break;
@@ -166,6 +170,7 @@ public class JFlexScraper implements WebScraper {
                         switch (token.getType()) {
                             case WORD:
                                 state = 3;
+                                System.out.println("estado 2 recibe un word" + token);
                                 
                                     if(etiquetaA) {
                                         if(token.getValue().equalsIgnoreCase("href")){
