@@ -4,10 +4,12 @@ import es.ceu.gisi.modcomp.webcrawler.scraper.WebScraper;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * Esta clase encapsula toda la lógica de interacción con el analizador Jsoup.
@@ -63,7 +65,7 @@ public class JsoupScraper implements WebScraper {
     @Override
     public List<String> retrieveHyperlinksA() {
 
-        List<String> resultado = null;
+        List<String> listOfLinks = new ArrayList<String>();
 
         /**
          * Deberá programar este método. El método devolverá todas las URLs que
@@ -71,7 +73,14 @@ public class JsoupScraper implements WebScraper {
          * esté analizando. Recuerde que las URLs de la etiqueta A vienen
          * anotadas en un atributo denominado href.
          */
-        return resultado;
+        
+        // Get All Elements of "a" tag
+        Elements hyperLinkElements = webPage.getElementsByTag("a");
+        
+        // Get value from "href" attribute of all the Elements
+        listOfLinks = this.getValuesFromElementsAttribute(hyperLinkElements, "href");
+                
+        return listOfLinks;
 
     }
 
@@ -84,7 +93,8 @@ public class JsoupScraper implements WebScraper {
     @Override
     public List<String> retrieveHyperlinksIMG() {
 
-        List<String> resultado = null;
+         // Habrá que programarlo..
+        ArrayList<String> listOfImgLinks = new ArrayList<String>();
 
         /**
          * Deberá programar este método. El método devolverá todas las URLs que
@@ -92,7 +102,14 @@ public class JsoupScraper implements WebScraper {
          * esté analizando. Recuerde que las imágenes de un documento dentro de
          * la etiqueta IMG vienen anotadas en un atributo denominado src.
          */
-        return resultado;
+        
+        // Obtener todos los elementos de la etiqueta "img"
+        Elements hyperLinkImgElements = webPage.getElementsByTag("img");
+        
+        // Obtener el valor del atributo "src" de todos los elementos
+        listOfImgLinks = this.getValuesFromElementsAttribute(hyperLinkImgElements, "src");
+                
+        return listOfImgLinks;
     }
 
     /**
@@ -108,10 +125,41 @@ public class JsoupScraper implements WebScraper {
          * Deberá programar este método. Las estadísticas simplemente serán el
          * número de etiquetas de ese tipo que se encuentran en el documento.
          */
+         // Get all the elements of the given tag name.        
+        Elements elements = webPage.getElementsByTag(tag);
+        
+        // Counts all the elements with the given tag name
+        int numberOfTagElements = elements.size();
+        
+        // Return the count.
+        return numberOfTagElements;
 
         // De momento, devolvemos 0 para que el proyecto compile.
-        return 0;
+        //return 0;
     }
+    
+     /**
+     * Gives you the list of all the values from the given attribute of the given HTML Elements.
+     * 
+     * @param elements All elements from which you want to get the values of attribute
+     * @param attributeName Name of the attribute from which you want the values     * 
+     * @return ArrayList<String> of all the values from given HTML Elements and its given Attribute name.
+     */
+    private ArrayList<String> getValuesFromElementsAttribute(Elements elements, String attributeName) {
+        ArrayList<String> listOfValues = new ArrayList<String>();
+        
+        // Recorrer en bucle todos los elementos
+        for (Element hyperLinkElement : elements) {
+            // Obtener el valor del atributo "href"
+            String hyperlink = hyperLinkElement.attr(attributeName);
+            
+            // Añadir el enlace obtenido a listOfLinks ArrayList<String>
+            listOfValues.add(hyperlink);
+        }
+        
+        return listOfValues;
+    }
+    
 
     /**
      * Obtiene la URL de la primera imagen que contiene el documento HTML que
