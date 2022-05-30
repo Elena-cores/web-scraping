@@ -184,6 +184,7 @@ public class JFlexScraper implements WebScraper {
                             case SLASH:
                                 state = 5; //etiqueta no nos interesa
                                     if(token.getValue().equalsIgnoreCase(tagStack.peek())) {
+                                        System.out.println(tagStack);
                                         tagStack.pop(); //si coincide con lo que tengo en la cima de la pila. Elemento se quita
                                     }   else {  
                                             tagsBalanced = false;

@@ -2,10 +2,12 @@ package es.ceu.gisi.modcomp.webcrawler.app;
 
 import es.ceu.gisi.modcomp.webcrawler.exceptions.WebCrawlerException;
 import es.ceu.gisi.modcomp.webcrawler.jflex.JFlexScraper;
+import es.ceu.gisi.modcomp.webcrawler.jsoup.JsoupScraper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -86,7 +88,59 @@ public class WebCrawler {
          * td, tr. Para ello, utilice los resultados que le proporcione el
          * método tagUsage() que ha programado.
          */
+        
+        
         System.out.println("\n\n** JSOUPSCRAPER **\n\n");
+        // Se inicializa JsoupScraper con la DIRECCIÓN HTTP de una página
+        // web a analizar. Se creará un archivo con todos los hipervínculos que
+        // encuentre en la página web. También obtendrá estadísticas de uso
+        // de las etiquetas HTML más comunes: a, br, div, li, ul, p, span, table, td, tr
+        
+        // Crear la variable URL del enlace html dado
+        URL url = new URL("https://www.eleconomista.es/");
+        
+        // Inicializar un objeto JsoupScrapper con la "url" dada
+        JsoupScraper jsoupScrapper = new JsoupScraper(url);
+        
+        // Obtener todos los hiperenlaces
+        List<String> hyperLinksJsoup = jsoupScrapper.retrieveHyperlinksA();
+        
+       // Obtener todos los enlaces de la etiqueta img
+        List<String> hyperLinksImgJsoup = jsoupScrapper.retrieveHyperlinksIMG();
+        
+        // Create a file with all the hyperlinks we found. and write it to "linksFileJSoup.txt"
+        // Type casting List<String> to ArrayList<String> so that I don't have to change the methods created already.
+        WriteLinksToFile("linksFileJSoup.txt", (List<String>) hyperLinksJsoup, (List<String>) hyperLinksImgJsoup);  
+        
+        // Create a variable to record the message and counts of each tag
+        String usageStatistics = "Usage Stats of Each HTML tag: \r\n";
+        
+        // Varibales to store counts of each type of tag
+        int aTagsCount = jsoupScrapper.tagUsage("a");
+        int brTagsCount = jsoupScrapper.tagUsage("br");
+        int divTagsCount = jsoupScrapper.tagUsage("div");
+        int liTagsCount = jsoupScrapper.tagUsage("li");
+        int ulTagsCount = jsoupScrapper.tagUsage("ul");
+        int pTagsCount = jsoupScrapper.tagUsage("p");
+        int spanTagsCount = jsoupScrapper.tagUsage("span");
+        int tableTagsCount = jsoupScrapper.tagUsage("table");
+        int tdTagsCount = jsoupScrapper.tagUsage("td");
+        int trTagsCount = jsoupScrapper.tagUsage("tr");
+        
+        // Adding the count of each tag to the usageStatistics variable
+        usageStatistics += "a - " + aTagsCount + "\r\n";
+        usageStatistics += "br - " + brTagsCount + "\r\n";
+        usageStatistics += "div - " + divTagsCount + "\r\n";
+        usageStatistics += "li - " + liTagsCount + "\r\n";
+        usageStatistics += "ul - " + ulTagsCount + "\r\n";
+        usageStatistics += "p - " + pTagsCount + "\r\n";
+        usageStatistics += "span - " + spanTagsCount + "\r\n";
+        usageStatistics += "table - " + tableTagsCount + "\r\n";
+        usageStatistics += "td - " + tdTagsCount + "\r\n";
+        usageStatistics += "tr - " + trTagsCount + "\r\n";
+        
+        // Showing the message on screen with usageStatistics variable
+        JOptionPane.showMessageDialog(null, usageStatistics);
 
     }
     

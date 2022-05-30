@@ -89,7 +89,7 @@ public class JFlexScraperTest {
         JFlexScraper parser = new JFlexScraper(TestFiles.TEST_FILE2);
 
         // El tamaño de la lista de URLs A encontrados es 1
-        assertEquals(parser.retrieveHyperlinksA().size(), 1);
+        assertEquals(1, parser.retrieveHyperlinksA().size());
         // El único elemento de esa lista es: http://www.bbc.co.uk
         assertEquals(parser.retrieveHyperlinksA().get(0), "http://www.bbc.co.uk");
 
@@ -212,4 +212,25 @@ public class JFlexScraperTest {
         //El documento está MAL balanceado
         assertFalse(parser.esDocumentoHTMLBienBalanceado());
     }
+    @Test
+     /**
+     * Comprueba si el documento HTML actual tiene exactamente 1 etiqueta "br".
+     */
+    public void estadisticasEtiquetaTest() throws IOException, FileNotFoundException, WebCrawlerException {
+        JFlexScraper parser = new JFlexScraper(TestFiles.TEST_FILE6);
+        // El tamaño de la lista de URLs img encontrados es 14
+         assertEquals(parser.retrieveHyperlinksIMG().size(), 14);
+    }
+     @Test
+     /**
+     * Comprueba si el documento HTML actual acepta un fichero vacío.
+     */
+    public void ficheroVacio() throws IOException, FileNotFoundException, WebCrawlerException {
+        JFlexScraper parser = new JFlexScraper(TestFiles.TEST_FILE0);
+        // Imprimir error
+         assertEquals(parser.retrieveHyperlinksIMG().size(), 0);
+         assertEquals(parser.retrieveHyperlinksIMG().size(), 0);
+    }
+    
+    
 }

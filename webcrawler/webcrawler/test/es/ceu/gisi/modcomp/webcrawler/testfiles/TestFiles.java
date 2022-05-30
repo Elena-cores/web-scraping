@@ -21,6 +21,11 @@ public abstract class TestFiles {
             + "/test/es/ceu/gisi/modcomp/webcrawler/testfiles/";
 
     /**
+     * Ruta del fichero de prueba 0.
+     */
+    public static final File TEST_FILE0 = new File(TESTFILE_PATH + "prueba0.html");
+
+    /**
      * Ruta del primer fichero de prueba.
      */
     public static final File TEST_FILE1 = new File(TESTFILE_PATH + "prueba1.html");

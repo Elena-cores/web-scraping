@@ -3,6 +3,7 @@ package es.ceu.gisi.modcomp.webcrawler.tests.jsoup;
 import es.ceu.gisi.modcomp.webcrawler.jsoup.JsoupScraper;
 import es.ceu.gisi.modcomp.webcrawler.testfiles.TestFiles;
 import java.io.IOException;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -30,6 +31,7 @@ public class JsoupScraperTest {
      * Analizador de tipo JsoupScraper
      */
     private final JsoupScraper parser;
+    private final JsoupScraper parseri;
 
     /**
      * Este constructor nos crea un analizador JSoup a partir del String de
@@ -52,6 +54,7 @@ public class JsoupScraperTest {
          * software implementado funciona correctamente.
          */
         parser = new JsoupScraper(TestFiles.TEST_FILE3);
+        parseri = new JsoupScraper(TestFiles.TEST_FILE2);
 
     }
 
@@ -64,6 +67,34 @@ public class JsoupScraperTest {
      * la URL de la imagen que se obtiene es: brushedsteel.jpg. Que es,
      * exáctamente, el valor de la única imagen que existe en esa página.
      */
+    @Test
+     /**
+     * Comprueba si el documento HTML actual tiene exactamente 1 etiqueta "br".
+     */
+    public void estadisticasEtiquetaTest() {
+        int countOfBrTag = parseri.tagUsage("br");
+        assertEquals(countOfBrTag, 1);
+    }
+    @Test
+    /**
+     * Comprueba si el documento HTML actual tiene exactamente 1 HyperLink en la etiqueta A con valor "http://www.bbc.co.uk".
+    */
+    
+    public void getHyperlinksTest() {
+        List<String> hyperLinks  = parseri.retrieveHyperlinksA();
+        String hyperLink = hyperLinks.get(0);
+        assertEquals(hyperLink, "http://www.bbc.co.uk");
+    }
+    
+    /**
+     * Comprueba si el documento HTML actual tiene exactamente 1 Hiperenlace de Imagen en la etiqueta IMG con valor "brushedsteel.jpg".
+    */
+    @Test
+    public void getHyperlinksImagesTest() {
+        List<String> hyperLinksImg = parseri.retrieveHyperlinksIMG();
+        String hyperlinkImg = hyperLinksImg.get(0);
+        assertEquals(hyperlinkImg, "brushedsteel.jpg");
+    }
     @Test
     public void recuperaNombrePrimeraImagenEnPrueba3() {
         assertEquals(parser.retrieveImgSrc(),

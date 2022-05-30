@@ -21,6 +21,9 @@ import org.jsoup.select.Elements;
 public class JsoupScraper implements WebScraper {
 
     private final Document webPage;
+     // Se ha creado esta varible para almacenar el valor por defecto de Timeout. 3 segundos = 3000 milisegundos
+    private final int DefaultTimeoutMillis = 3000;
+    
 
     /**
      * Este constructor crea un analizador para la página web que indica la URL.
@@ -38,7 +41,7 @@ public class JsoupScraper implements WebScraper {
          */
 
         // De momento, el documento se inicializa a null para que el proyecto compile.
-        webPage = null;
+         webPage = Jsoup.parse(url, this.DefaultTimeoutMillis);
     }
 
     /**
@@ -74,10 +77,10 @@ public class JsoupScraper implements WebScraper {
          * anotadas en un atributo denominado href.
          */
         
-        // Get All Elements of "a" tag
+        // Obtener todos los elementos de la etiqueta "a"
         Elements hyperLinkElements = webPage.getElementsByTag("a");
         
-        // Get value from "href" attribute of all the Elements
+        // Obtener el valor del atributo "href" de todos los elementos
         listOfLinks = this.getValuesFromElementsAttribute(hyperLinkElements, "href");
                 
         return listOfLinks;
@@ -125,13 +128,13 @@ public class JsoupScraper implements WebScraper {
          * Deberá programar este método. Las estadísticas simplemente serán el
          * número de etiquetas de ese tipo que se encuentran en el documento.
          */
-         // Get all the elements of the given tag name.        
+         // Obtener todos los elementos del nombre de la etiqueta dada.        
         Elements elements = webPage.getElementsByTag(tag);
         
-        // Counts all the elements with the given tag name
+        // Cuenta todos los elementos con el nombre de etiqueta dado
         int numberOfTagElements = elements.size();
         
-        // Return the count.
+        // Retornar el count
         return numberOfTagElements;
 
         // De momento, devolvemos 0 para que el proyecto compile.
@@ -139,11 +142,11 @@ public class JsoupScraper implements WebScraper {
     }
     
      /**
-     * Gives you the list of all the values from the given attribute of the given HTML Elements.
+     * Te da la lista de todos los valores del atributo dado de los elementos HTML dados.
      * 
-     * @param elements All elements from which you want to get the values of attribute
-     * @param attributeName Name of the attribute from which you want the values     * 
-     * @return ArrayList<String> of all the values from given HTML Elements and its given Attribute name.
+     * @param elements Todos los elementos de los que quieres obtener los valores del atributo
+     * @param attributeName Nombre del atributo del que se quieren obtener los valores 
+     * @return ArrayList<String> de todos los valores de los Elementos HTML dados y su nombre de Atributo dado.
      */
     private ArrayList<String> getValuesFromElementsAttribute(Elements elements, String attributeName) {
         ArrayList<String> listOfValues = new ArrayList<String>();
